@@ -25,10 +25,10 @@ public class WoodenShelf implements Shelves {
     @Override
     public void giveBookTo(String title, Consumer<String> recieveBook) {
         if (books.contains(title)) {
+            books.remove(title);
             recieveBook.accept(title);
         } else {
             throw new NotPresentException();
         }
-
     }
 }

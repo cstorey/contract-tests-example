@@ -39,4 +39,12 @@ import static org.hamcrest.Matchers.contains;
     public void cannotGiveOutNonExistentBook() {
         evilBookshelf().giveBookTo("Cthulhu just wants a hug", (_x) -> {});
     }
+
+    @Test(expected = Shelves.NotPresentException.class)
+    public void cannotGiveOutSameBookTwice() {
+        T shelves = evilBookshelf();
+        shelves.giveBookTo(NECRONOMICON, (b) -> {});
+        shelves.giveBookTo(NECRONOMICON, (b) -> {});
+    }
+
 }
