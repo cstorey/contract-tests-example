@@ -10,4 +10,7 @@ public interface Shelves {
     Collection<String> listBooks();
 
     void giveBookTo(String necronomicon, Consumer<String> recieveBook);
+
+    public class NotPresentException extends RuntimeException {
+    }
 }

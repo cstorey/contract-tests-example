@@ -46,4 +46,14 @@ public class LibraryTest {
 
         verify(client).receiveBook(NECRONOMICON);
     }
+
+    @Test
+    public void librarianCanApologiseOnBehalfOfShelves() {
+        Mockito.doThrow(new Shelves.NotPresentException()).when(shelves).giveBookTo(any(), any());
+
+        Library.Client client = mock(Library.Client.class);
+        library.checkout(NECRONOMICON, client);
+
+        verify(client).receiveApology();
+    }
 }

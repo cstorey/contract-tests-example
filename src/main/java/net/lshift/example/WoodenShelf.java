@@ -24,6 +24,11 @@ public class WoodenShelf implements Shelves {
 
     @Override
     public void giveBookTo(String title, Consumer<String> recieveBook) {
-        recieveBook.accept(title);
+        if (books.contains(title)) {
+            recieveBook.accept(title);
+        } else {
+            throw new NotPresentException();
+        }
+
     }
 }

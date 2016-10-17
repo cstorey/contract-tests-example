@@ -34,4 +34,9 @@ import static org.hamcrest.Matchers.contains;
         evilBookshelf().giveBookTo(NECRONOMICON, books::add);
         assertThat(books, contains(NECRONOMICON));
     }
+
+    @Test(expected=Shelves.NotPresentException.class)
+    public void cannotGiveOutNonExistentBook() {
+        evilBookshelf().giveBookTo("Cthulhu just wants a hug", (_x) -> {});
+    }
 }

@@ -19,10 +19,16 @@ public class Library {
     }
 
     public void checkout(String title, Client client) {
-        shelves.giveBookTo(title,(book) -> client.receiveBook(book));
+        try {
+            shelves.giveBookTo(title, (book) -> client.receiveBook(book));
+        } catch (Shelves.NotPresentException e) {
+            client.receiveApology();
+        }
     }
 
     public interface Client {
-        void receiveBook(String necronomicon);
+        void receiveBook(String book);
+
+        void receiveApology();
     }
 }
