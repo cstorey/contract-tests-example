@@ -6,7 +6,14 @@ package net.lshift.example;
  * @author ceri, @date 16/10/17 11:06
  */
 public class Library {
-    public boolean someLibraryMethod() {
-        return true;
+    private Shelves shelves;
+
+    public Library(Shelves shelves) {
+
+        this.shelves = shelves;
+    }
+
+    public boolean hasBook(String title) {
+        return shelves.listBooks().contains(title);
     }
 }
