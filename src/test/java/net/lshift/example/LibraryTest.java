@@ -1,6 +1,10 @@
 package net.lshift.example;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import org.junit.Test;
+
+import java.util.List;
+import java.util.function.Consumer;
+
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -11,19 +15,30 @@ import static org.mockito.Mockito.*;
  * @author ceri, @date 16/10/17 11:06
  */
 public class LibraryTest {
+    public static final String NECRONOMICON = "Necronomicon";
     Shelves shelves = mock(Shelves.class);
     Library library = new Library(shelves);
 
 
     @Test
     public void shouldSayWhenBookIsPresent() {
-        when(shelves.listBooks()).thenReturn(ImmutableList.of("Necronomicon", "Evil Dead"));
-        assertTrue(library.hasBook("Necronomicon"));
+        when(shelves.listBooks()).thenReturn(ShelfContract.EVIL_BOOKS);
+        assertTrue(library.hasBook(NECRONOMICON));
     }
 
     @Test
     public void shouldSayWhenBookIsNotPresent() {
-        when(shelves.listBooks()).thenReturn(ImmutableList.of("I love bees"));
-        assertFalse(library.hasBook("Necronomicon"));
+        when(shelves.listBooks()).thenReturn(ShelfContract.NICE_BOOKS);
+        assertFalse(library.hasBook(NECRONOMICON));
     }
+
+    @Test
+    public void canRemoveFromBookshelf() {
+        List<String> clientBooks = Lists.newArrayList();
+        Consumer<String> receiveBook = clientBooks::add;
+        library.checkout(NECRONOMICON, receiveBook);
+
+        verify(shelves).giveBookTo(NECRONOMICON, receiveBook);
+    }
+
 }
