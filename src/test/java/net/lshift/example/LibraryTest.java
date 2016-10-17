@@ -1,6 +1,8 @@
 package net.lshift.example;
 import com.google.common.collect.Lists;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -33,12 +35,15 @@ public class LibraryTest {
     }
 
     @Test
-    public void canRemoveFromBookshelf() {
-        List<String> clientBooks = Lists.newArrayList();
-        Consumer<String> receiveBook = clientBooks::add;
-        library.checkout(NECRONOMICON, receiveBook);
+    public void shouldNotExposeClientDirectlyToShelves() {
+        ArgumentCaptor<Consumer<String>> captor = ArgumentCaptor.forClass(Consumer.class);
+        Mockito.doNothing().when(shelves).giveBookTo(eq(NECRONOMICON), captor.capture());
 
-        verify(shelves).giveBookTo(NECRONOMICON, receiveBook);
+        Library.Client client = mock(Library.Client.class);
+        library.checkout(NECRONOMICON, client);
+
+        captor.getValue().accept(NECRONOMICON);
+
+        verify(client).receiveBook(NECRONOMICON);
     }
-
 }
